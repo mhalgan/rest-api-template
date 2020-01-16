@@ -28,6 +28,7 @@ module.exports = function() {
 
     mongoose.connect(db.database, {
       useNewUrlParser: true,
+      useUnifiedTopology: true,
       useCreateIndex: true
     })
 
