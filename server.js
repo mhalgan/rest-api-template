@@ -1,6 +1,6 @@
-const server = require('./configs/app')()
-const config = require('./configs/config/config')
-const db = require('./configs/db')
+const server = require('./config/app')()
+const config = require('./config/env/config')
+const db = require('./config/db')
 
 server.create(config, db)
 

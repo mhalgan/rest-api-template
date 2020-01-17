@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const helmet = require('helmet')
+const expressValidator = require('express-validator')
 const mongoose = require('mongoose')
 
 module.exports = function() {
@@ -26,11 +27,16 @@ module.exports = function() {
       })
     )
 
-    mongoose.connect(db.database, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true
-    })
+    mongoose
+      .connect(db.database, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true
+      })
+      .catch(function(error) {
+        console.log(error)
+        process.exit(1)
+      })
 
     routes.init(server)
   }
