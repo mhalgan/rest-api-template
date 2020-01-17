@@ -38,11 +38,11 @@ const register = async (req, res, next) => {
       })
     )
   } catch (error) {
-    console.log(error)
     return next(
       res
         .status(500)
-        .json({ errors: [{ msg: 'there was a problem registering a user' }] })
+        .json({ errors: [{ msg: 'there was a problem registering a user' }] }),
+      error
     )
   }
 }
@@ -79,11 +79,11 @@ const login = async (req, res, next) => {
       })
     )
   } catch (error) {
-    console.log(error)
     return next(
       res
         .status(500)
-        .json({ errors: [{ msg: 'there was a problem login a user' }] })
+        .json({ errors: [{ msg: 'there was a problem login a user' }] }),
+      error
     )
   }
 }
