@@ -13,6 +13,10 @@ let User = new Schema(
       required: [true, 'email is required'],
       unique: true,
       lowercase: true
+    },
+    password: {
+      type: String,
+      required: [true, 'password is required']
     }
   },
   { timestamps: true }

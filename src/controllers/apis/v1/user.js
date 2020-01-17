@@ -1,5 +1,5 @@
 const express = require('express')
-const userService = require('../../services/users/user')
+const userService = require('../../../services/v1/users/user')
 
 let router = express.Router()
 

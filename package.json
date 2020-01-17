@@ -2,9 +2,9 @@
   "name": "rest-api",
   "version": "1.0.0",
   "description": "Complete REST API",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
-    "dev": "nodemon server",
+    "dev": "nodemon src/app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
