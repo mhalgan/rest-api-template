@@ -1,7 +1,7 @@
 const express = require('express')
 let router = express.Router()
 
-const authService = require('../../../services/v1/auth/auth')
+const authController = require('../../../controllers/api/v1/auth')
 const validation = require('../../../middlewares/validation')
 
 /**
@@ -93,8 +93,8 @@ const validation = require('../../../middlewares/validation')
 router.post(
   '/register',
   validation.validateRegistrationBody(),
-  authService.register
+  authController.register
 )
-router.post('/login', validation.validateLoginBody(), authService.login)
+router.post('/login', validation.validateLoginBody(), authController.login)
 
 module.exports = router

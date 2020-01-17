@@ -5,5 +5,5 @@ module.exports = {
     description: 'Full functional scalable REST API Template'
   },
   basePath: '/api',
-  apis: ['src/controllers/apis/v1/*.js']
+  apis: ['src/controllers/api/v1/*.js']
 }
