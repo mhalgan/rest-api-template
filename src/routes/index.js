@@ -1,14 +1,7 @@
+const express = require('express')
+const router = express.Router()
 const apiRoute = require('./apis')
 
-const init = server => {
-  server.get('*', function(req, res, next) {
-    console.log('Request was made to: ' + req.originalUrl)
-    return next()
-  })
+router.use('/api', apiRoute)
 
-  server.use('/api', apiRoute)
-}
-
-module.exports = {
-  init: init
-}
+module.exports = router

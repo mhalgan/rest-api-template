@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const helmet = require('helmet')
 const mongoose = require('mongoose')
+const logger = require('../config/winston')
 
 module.exports = function() {
   let server = express(),
@@ -37,7 +38,11 @@ module.exports = function() {
         process.exit(1)
       })
 
-    routes.init(server)
+    // Logs before routes
+    server.use(logger.requestLogger)
+    server.use(routes)
+    // Logs errors
+    server.use(logger.errorLogger)
   }
 
   start = () => {
