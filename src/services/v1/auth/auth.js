@@ -1,7 +1,7 @@
 const express = require('express')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const { validationResult } = require('express-validator/check')
+const { validationResult } = require('express-validator')
 
 const config = require('../../../config/env/config')
 const userModel = require('../../../models/user')
@@ -59,7 +59,7 @@ const login = async (req, res, next) => {
       })
     }
 
-    let token = jwt.sign({ id: userExists._id }, config.secret, {
+    let token = jwt.sign({ id: userExists._id }, process.env.PRIVATE_KEY, {
       expiresIn: 86400
     })
 

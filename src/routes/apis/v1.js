@@ -1,4 +1,4 @@
-const userController = require('../../controllers/apis/v1/user')
+const userController = require('../../controllers/apis/v1/users')
 const authController = require('../../controllers/apis/v1/auth')
 
 const express = require('express')
