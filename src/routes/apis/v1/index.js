@@ -1,6 +1,6 @@
 const authClientRequest = require('../../../middlewares/authGuard')
-const userRoutes = require('./users')
-const authRoutes = require('./auth')
+const userRoutes = require('./users.route')
+const authRoutes = require('./auth.route')
 
 const express = require('express')
 let router = express.Router()

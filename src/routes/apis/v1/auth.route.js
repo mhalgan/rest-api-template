@@ -1,7 +1,7 @@
 const express = require('express')
 let router = express.Router()
 
-const authController = require('../../../controllers/api/v1/auth')
+const authController = require('../../../controllers/api/v1/auth.controller')
 const validation = require('../../../middlewares/validation')
 
 /**

@@ -2,9 +2,9 @@
   "name": "rest-api",
   "version": "1.0.0",
   "description": "Complete REST API",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
-    "dev": "nodemon src/app",
+    "dev": "nodemon src/server",
     "build": "echo not implemented yet",
     "api-docs": "swagger-jsdoc -d src/config/swaggerDef.js",
     "test": "mocha --exit"

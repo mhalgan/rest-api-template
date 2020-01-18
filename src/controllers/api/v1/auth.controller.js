@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 const { validationResult } = require('express-validator')
 
 const config = require('../../../config/env/config')
-const userModel = require('../../../models/user')
+const userModel = require('../../../models/user.model')
 
 const register = async (req, res, next) => {
   const errors = validationResult(req)
