@@ -27,10 +27,10 @@ app.use(
 db.connect()
   .then(function() {
     // Logs before routes
-    app.use(logger.requestLogger)
+    // app.use(logger.requestLogger)
     app.use(routes)
     // Logs errors
-    app.use(logger.errorLogger)
+    // app.use(logger.errorLogger)
 
     let hostname = app.get('hostname'),
       port = app.get('port')

@@ -5,7 +5,7 @@ const user = 'admin'
 const password = '2GFCikqDsTe9eoHA'
 
 const connection = {
-  mongoAtlas: `mongodb+srv://${user}:${password}@cluster0-cygcu.mongodb.net/${collection}?retryWrites=true&w=majority`,
+  mongoAtlas: `mongodb+srv://${user}:${password}@cluster0-cygcu.mongodb.net/${collection}?w=majority`,
   mongoLocal: `mongodb://localhost:27017/${collection}`
 }
 
