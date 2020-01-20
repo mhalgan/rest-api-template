@@ -11,7 +11,8 @@ module.exports = function errorHandler(err, req, res, next) {
       headers: err.req.headers,
       body: err.req.body,
       statusCode: err.statusCode,
-      statusMessage: err.statusMessage
+      statusMessage: err.statusMessage,
+      realError: res.realError
     }
   }
 
@@ -20,5 +21,7 @@ module.exports = function errorHandler(err, req, res, next) {
   } else if (res.statusCode >= 500 && res.statusCode <= 599) {
     logger.error(err)
   }
+
+  delete res.realError
   return res
 }

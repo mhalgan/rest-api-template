@@ -30,17 +30,15 @@ const register = async (req, res, next) => {
       throw new error()
     }
 
-    return next(
-      res.status(201).json({
-        success: [{ msg: 'user registered successfully' }]
-      })
-    )
+    return res.status(201).json({
+      success: [{ msg: 'user registered successfully' }]
+    })
   } catch (error) {
     return next(
-      res
-        .status(500)
-        .json({ errors: [{ msg: 'there was a problem registering a user' }] }),
-      error
+      res.status(500).json({
+        errors: [{ msg: 'there was a problem registering the user' }],
+        realError: error
+      })
     )
   }
 }
@@ -72,7 +70,7 @@ const login = async (req, res, next) => {
     return next(
       res.status(200).json({
         success: [
-          { msg: 'user login successfully', email: email, token: token }
+          { msg: 'user logged in successfully', email: email, token: token }
         ]
       })
     )

@@ -7,36 +7,83 @@
   "basePath": "/api",
   "swagger": "2.0",
   "paths": {
-    "/users": {
-      "get": {
+    "/register": {
+      "post": {
         "summary": [
-          "Returns a list with all users"
+          "Register a new user"
         ],
         "produces": [
           "application/json"
         ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User to be registered",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
         "tags": [
-          "users"
+          "auth"
+        ],
+        "responses": {
+          "201": {
+            "description": "User registered successfully"
+          },
+          "409": {
+            "description": "E-mail already exists"
+          },
+          "422": {
+            "description": "Some required field is missing"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": [
+          "Logs the user in and get an authorization token"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User to be logged",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginUser"
+            }
+          }
+        ],
+        "tags": [
+          "auth"
         ],
         "responses": {
           "200": {
-            "description": "Success",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/CompleteUser"
-              }
-            }
+            "description": "User logged in successfully"
+          },
+          "401": {
+            "description": "E-mail/password is wrong"
+          },
+          "422": {
+            "description": "Some required field is missing"
           }
         }
       }
     }
   },
   "definitions": {
-    "User": {
+    "LoginUser": {
       "type": "object",
       "required": [
-        "email"
+        "email",
+        "password"
       ],
       "properties": {
         "email": {
@@ -44,11 +91,26 @@
           "format": "email",
           "example": "user@email.com"
         },
-        "firstName": {
-          "type": "string"
-        },
-        "lastName": {
-          "type": "string"
+        "password": {
+          "type": "string",
+          "minLength": 8
+        }
+      }
+    },
+    "User": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/LoginUser"
+        }
+      ],
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 3
         }
       }
     },
@@ -56,58 +118,6 @@
       "allOf": [
         {
           "$ref": "#/definitions/User"
-        }
-      ],
-      "type": "object",
-      "properties": {
-        "_id": {
-          "type": "string",
-          "format": "uuid"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
-    },
-    "Order": {
-      "type": "object",
-      "required": [
-        "product",
-        "userId"
-      ],
-      "properties": {
-        "product": {
-          "type": "string"
-        },
-        "userId": {
-          "type": "string",
-          "format": "uuid"
-        },
-        "tags": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "price": {
-          "format": "float",
-          "type": "number"
-        },
-        "quantity": {
-          "type": "number",
-          "format": "float"
-        }
-      }
-    },
-    "CompleteOrder": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/Order"
         }
       ],
       "type": "object",
