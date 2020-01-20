@@ -1,46 +1,41 @@
 const winston = require('winston')
-const expressWinston = require('express-winston')
-const ElasticSearch = require('winston-elasticsearch')
+const fs = require('fs')
+// const ElasticSearch = require('winston-elasticsearch')
+require('winston-daily-rotate-file')
+
+let logDirectory = 'logs/'
+
+if (!fs.existsSync(logDirectory)) {
+  // Create the log directory if it does not exist
+  fs.mkdirSync(logDirectory)
+}
+
+const dailyRotate = new winston.transports.DailyRotateFile({
+  dirname: logDirectory,
+  filename: 'rest-api-%DATE%.log',
+  datePattern: 'YYYY-MM-DD',
+  zippedArchive: true,
+  maxSize: '5m',
+  zippedArchive: true,
+  level: 'warn'
+})
+
+const console = new winston.transports.Console()
+
+const transports = [dailyRotate]
+if (process.env.NODE_ENV != 'production') {
+  transports.push(console)
+}
 
 const logger = winston.createLogger({
-  transports: [new winston.transports.Console()]
-})
-
-const requestLogger = expressWinston.logger({
-  transports: [new winston.transports.Console()],
   format: winston.format.combine(
-    winston.format.colorize(),
+    winston.format.timestamp(),
     winston.format.json()
   ),
-  meta: true,
-  msg: 'HTTP {{req.method}} {{req.url}}',
-  expressFormat: true
-})
-
-const errorLogger = expressWinston.errorLogger({
-  transports: [new winston.transports.Console()],
-  format: winston.format.combine(
-    winston.format.colorize(),
-    winston.format.json()
-  ),
-  statusLevel: false,
-  level: function(req, res) {
-    var level = ''
-    if (res.statusCode >= 100) {
-      level = 'info'
-    }
-    if (res.statusCode >= 400) {
-      level = 'warn'
-    }
-    if (res.statusCode >= 500) {
-      level = 'error'
-    }
-    return level
-  }
+  transports: transports,
+  exitOnError: false
 })
 
 module.exports = {
-  logger: logger,
-  requestLogger: requestLogger,
-  errorLogger: errorLogger
+  logger: logger
 }

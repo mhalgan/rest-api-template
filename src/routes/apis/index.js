@@ -4,6 +4,7 @@ const swaggerUi = require('swagger-ui-express')
 const swaggerDocument = require('../../../swagger.json')
 const v1ApiController = require('./v1')
 
+// Load Swagger documentation
 router.use('/', swaggerUi.serve)
 router.get('/', swaggerUi.setup(swaggerDocument))
 

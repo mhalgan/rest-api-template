@@ -4,13 +4,14 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const helmet = require('helmet')
-const logger = require('./config/winston')
+const logger = require('./config/winston').logger
 const config = require('./config/env/config')
 const db = require('./config/db')
 const routes = require('./routes')
 
 let app = express()
 
+// Set server variables
 app.set('env', config.env)
 app.set('port', config.port)
 app.set('hostname', config.hostname)
@@ -24,23 +25,21 @@ app.use(
     extended: false
   })
 )
+
+// Add routing
+app.use(routes)
+
 db.connect()
   .then(function() {
-    // Logs before routes
-    // app.use(logger.requestLogger)
-    app.use(routes)
-    // Logs errors
-    // app.use(logger.errorLogger)
-
     let hostname = app.get('hostname'),
       port = app.get('port')
 
     app.listen(port, function() {
-      console.log(`Express app listening on http://${hostname}:${port}/api`)
+      logger.info(`Express app listening on http://${hostname}:${port}/api`)
     })
   })
   .catch(function(error) {
-    console.log(error)
+    logger.error(error)
   })
 
 module.exports = app
