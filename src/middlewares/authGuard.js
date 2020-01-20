@@ -17,8 +17,7 @@ const authClientToken = async (req, res, next) => {
         res.status(401).json({ errors: [{ msg: 'Invalid token', error: err }] })
       )
     }
-
-    return next()
+    next()
   })
 }
 
