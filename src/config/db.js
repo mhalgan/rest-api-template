@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const logger = require('./winston').logger
 
 const collection = 'test'
 const user = 'admin'
@@ -6,7 +7,7 @@ const password = '2GFCikqDsTe9eoHA'
 
 const connection = {
   mongoAtlas: `mongodb+srv://${user}:${password}@cluster0-cygcu.mongodb.net/${collection}?w=majority`,
-  mongoLocal: `mongodb://localhost:2017/${collection}`
+  mongoLocal: `mongodb://localhost:27017/${collection}`
 }
 
 exports.connect = function() {
@@ -18,11 +19,11 @@ exports.connect = function() {
         useCreateIndex: true
       })
       .then(function() {
-        console.log('MongoDB connected!')
+        logger.info('MongoDB connected!')
         resolve()
       })
       .catch(function(error) {
-        console.log(error)
+        logger.error(error)
         reject(error)
       })
   })

@@ -22,6 +22,7 @@ const dailyRotate = new winston.transports.DailyRotateFile({
 
 const console = new winston.transports.Console()
 
+// Only log to console if not in production
 const transports = [dailyRotate]
 if (process.env.NODE_ENV != 'production') {
   transports.push(console)

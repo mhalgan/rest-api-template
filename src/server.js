@@ -8,6 +8,7 @@ const logger = require('./config/winston').logger
 const config = require('./config/env/config')
 const db = require('./config/db')
 const routes = require('./routes')
+const errorHandler = require('./middlewares/errorHandler')
 
 let app = express()
 
@@ -28,6 +29,9 @@ app.use(
 
 // Add routing
 app.use(routes)
+
+// Add erro handling
+app.use(errorHandler)
 
 db.connect()
   .then(function() {
