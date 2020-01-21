@@ -4,6 +4,10 @@ module.exports = {
     version: '1.0.0',
     description: 'Full functional scalable REST API Template'
   },
-  basePath: '/api',
+  tags: {
+    name: 'auth',
+    description: 'Authorization endpoints'
+  },
+  basePath: '/api/v1',
   apis: ['src/routes/api/v1/*.js']
 }

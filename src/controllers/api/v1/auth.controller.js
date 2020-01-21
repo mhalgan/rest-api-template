@@ -59,11 +59,15 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
   const errors = validationResult(req)
 
+  // Check if the body of the request is valid
   if (!errors.isEmpty()) {
-    return next(res.status(422).json({ errors: errors.array() }))
+    res.status(422)
+    return next(errors)
   }
 
   let { email, password } = req.body
+
+  // Check if the user exists and if the password is valid
   try {
     let userExists = await userModel.findOne({ email: email })
     let passwordValid = await bcrypt.compare(password, userExists.password)
@@ -73,24 +77,23 @@ const login = async (req, res, next) => {
       return next('email/password is wrong')
     }
 
+    // Generate the authorization token, valid for 7 days
     let token = jwt.sign({ id: userExists._id }, process.env.PRIVATE_KEY, {
-      expiresIn: 86400
+      expiresIn: '7d'
     })
 
-    return next(
-      res.status(200).json({
-        success: [
-          { msg: 'user logged in successfully', email: email, token: token }
-        ]
-      })
-    )
+    res.set('Authorization', token)
+    res.status(200).json({
+      success: [
+        { msg: 'user logged in successfully', email: email, token: token }
+      ]
+    })
   } catch (error) {
-    return next(
-      res.status(500).json({
-        errors: [{ msg: 'there was a problem login a user' }],
-        realError: error.message
-      })
-    )
+    res.status(500)
+    return next({
+      errors: [{ msg: 'there was a problem on the user login proccess' }],
+      realError: error
+    })
   }
 }
 

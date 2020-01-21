@@ -4,10 +4,14 @@
     "version": "1.0.0",
     "description": "Full functional scalable REST API Template"
   },
-  "basePath": "/api",
+  "tags": {
+    "name": "auth",
+    "description": "Authorization endpoints"
+  },
+  "basePath": "/api/v1",
   "swagger": "2.0",
   "paths": {
-    "/register": {
+    "/auth/register": {
       "post": {
         "summary": [
           "Register a new user"
@@ -22,7 +26,7 @@
             "description": "User to be registered",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/RegisterUser"
             }
           }
         ],
@@ -42,7 +46,7 @@
         }
       }
     },
-    "/login": {
+    "/auth/login": {
       "post": {
         "summary": [
           "Logs the user in and get an authorization token"
@@ -66,7 +70,23 @@
         ],
         "responses": {
           "200": {
-            "description": "User logged in successfully"
+            "description": "User logged in successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "msg": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "token": {
+                  "type": "string",
+                  "format": "jwt"
+                }
+              }
+            }
           },
           "401": {
             "description": "E-mail/password is wrong"
@@ -81,64 +101,36 @@
   "definitions": {
     "LoginUser": {
       "type": "object",
-      "required": [
-        "email",
-        "password"
-      ],
+      "required": "email password",
       "properties": {
         "email": {
           "type": "string",
-          "format": "email",
-          "example": "user@email.com"
+          "format": "email"
         },
         "password": {
           "type": "string",
-          "minLength": 8
+          "minLength": 8,
+          "example": "testing123"
         }
       }
     },
-    "User": {
+    "RegisterUser": {
       "allOf": [
         {
           "$ref": "#/definitions/LoginUser"
         }
       ],
       "type": "object",
-      "required": [
-        "name"
-      ],
+      "required": "name",
       "properties": {
         "name": {
           "type": "string",
           "minLength": 3
         }
       }
-    },
-    "CompleteUser": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/User"
-        }
-      ],
-      "type": "object",
-      "properties": {
-        "_id": {
-          "type": "string",
-          "format": "uuid"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
     }
   },
   "responses": {},
   "parameters": {},
-  "securityDefinitions": {},
-  "tags": []
+  "securityDefinitions": {}
 }

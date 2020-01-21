@@ -11,45 +11,32 @@ const validation = require('../../../middlewares/validation')
  *   LoginUser:
  *     type: object
  *     required:
- *       - email
- *       - password
+ *       email
+ *       password
  *     properties:
  *       email:
  *         type: string
  *         format: email
- *         example: user@email.com
  *       password:
  *         type: string
  *         minLength: 8
- *   User:
+ *         example: testing123
+ *
+ *   RegisterUser:
  *     allOf:
- *      -  $ref: "#/definitions/LoginUser"
+ *     -  $ref: "#/definitions/LoginUser"
  *     type: object
  *     required:
- *       - name
+ *       name
  *     properties:
  *       name:
  *         type: string
  *         minLength: 3
- *   CompleteUser:
- *     allOf:
- *      -  $ref: "#/definitions/User"
- *     type: object
- *     properties:
- *       _id:
- *         type: string
- *         format: uuid
- *       createdAt:
- *         type: string
- *         format: date-time
- *       updatedAt:
- *         type: string
- *         format: date-time
  */
 
 /**
  *  @swagger
- *  /register:
+ *  /auth/register:
  *    post:
  *      summary:
  *      - Register a new user
@@ -61,7 +48,7 @@ const validation = require('../../../middlewares/validation')
  *        description: "User to be registered"
  *        required: true
  *        schema:
- *          $ref: "#/definitions/User"
+ *          $ref: "#/definitions/RegisterUser"
  *      tags:
  *      - auth
  *      responses:
@@ -80,7 +67,7 @@ router.post(
 
 /**
  *  @swagger
- *  /login:
+ *  /auth/login:
  *    post:
  *      summary:
  *      - Logs the user in and get an authorization token
@@ -98,6 +85,17 @@ router.post(
  *      responses:
  *        200:
  *          description: User logged in successfully
+ *          schema:
+ *            type: "object"
+ *            properties:
+ *              msg:
+ *                type: string
+ *              email:
+ *                type: string
+ *                format: email
+ *              token:
+ *                type: string
+ *                format: jwt
  *        401:
  *          description: E-mail/password is wrong
  *        422:
