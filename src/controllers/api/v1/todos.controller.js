@@ -216,9 +216,9 @@ const deleteUser = async (req, res, next) => {
 }
 
 module.exports = {
-  getUsers: getUsers,
-  getUserById: getUserById,
-  createUser: createUser,
-  updateUser: updateUser,
-  deleteUser: deleteUser
+  getUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser
 }

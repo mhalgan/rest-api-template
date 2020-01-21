@@ -23,5 +23,5 @@ const authClientToken = async (req, res, next) => {
 }
 
 module.exports = {
-  authClientToken: authClientToken
+  authClientToken
 }

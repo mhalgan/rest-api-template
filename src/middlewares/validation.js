@@ -36,6 +36,6 @@ const validateLoginBody = () => {
 }
 
 module.exports = {
-  validateRegistrationBody: validateRegistrationBody,
-  validateLoginBody: validateLoginBody
+  validateRegistrationBody,
+  validateLoginBody
 }

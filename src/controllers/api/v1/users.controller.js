@@ -2,17 +2,6 @@ const User = require('../../../models/user.model')
 
 const getUserById = async (req, res, next) => {
   let userId = req.params.id
-  if (req.jwtId != userId) {
-    res.status(401)
-    return next({
-      errors: [
-        {
-          msg: "you don't have permission to fetch this user"
-        }
-      ],
-      realError: `JWT user id (${req.jwtId}) is diferent from the parameter id (${userId})`
-    })
-  }
 
   try {
     // Get user from database
@@ -110,12 +99,11 @@ const updateUser = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
   let userId = req.params.id
+
   try {
-    let user = await User.findByIdAndRemove(userId)
+    let user = await User.findByIdAndRemove(userId, { useFindAndModify: false })
     if (user) {
-      return res.status(204).json({
-        msg: `user with id ${userId} deleted successfully`
-      })
+      return res.status(204).json()
     }
 
     // User not found
@@ -134,8 +122,26 @@ const deleteUser = async (req, res, next) => {
   }
 }
 
+const checkUser = async (req, res, next) => {
+  // Checks if the user inside the payload is the same user being requested
+  let userId = req.params.id
+  if (req.jwtId != userId) {
+    res.status(401)
+    return next({
+      errors: [
+        {
+          msg: 'you have no permission to interact with this user'
+        }
+      ],
+      realError: `JWT user id (${req.jwtId}) is diferent from the parameter id (${userId})`
+    })
+  }
+  next()
+}
+
 module.exports = {
-  getUserById: getUserById,
-  updateUser: updateUser,
-  deleteUser: deleteUser
+  getUserById,
+  updateUser,
+  deleteUser,
+  checkUser
 }

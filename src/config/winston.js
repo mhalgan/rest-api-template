@@ -38,5 +38,5 @@ const logger = winston.createLogger({
 })
 
 module.exports = {
-  logger: logger
+  logger
 }

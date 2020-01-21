@@ -54,6 +54,12 @@ const validation = require('../../../middlewares/validation')
  *      responses:
  *        201:
  *          description: User registered successfully
+ *          schema:
+ *            type: "object"
+ *            properties:
+ *              id:
+ *                type: string
+ *                format: ObjectId
  *        409:
  *          description: E-mail already exists
  *        422:
