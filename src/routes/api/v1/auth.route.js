@@ -96,6 +96,9 @@ router.post(
  *              token:
  *                type: string
  *                format: jwt
+ *              id:
+ *                type: string
+ *                format: ObjectId
  *        401:
  *          description: E-mail/password is wrong
  *        422:

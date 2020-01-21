@@ -70,11 +70,22 @@ const login = async (req, res, next) => {
   // Check if the user exists and if the password is valid
   try {
     let userExists = await userModel.findOne({ email: email })
+    if (!userExists) {
+      res.status(401)
+      return next({
+        errors: [{ msg: 'email/password is wrong' }],
+        realError: 'user not exists'
+      })
+    }
+
     let passwordValid = await bcrypt.compare(password, userExists.password)
 
-    if (!userExists || !passwordValid) {
+    if (!passwordValid) {
       res.status(401)
-      return next('email/password is wrong')
+      return next({
+        errors: [{ msg: 'email/password is wrong' }],
+        realError: 'invalid password'
+      })
     }
 
     // Generate the authorization token, valid for 7 days
@@ -85,7 +96,7 @@ const login = async (req, res, next) => {
     res.set('Authorization', token)
     res.status(200).json({
       success: [
-        { msg: 'user logged in successfully', email: email, token: token }
+        { msg: 'user logged in successfully', email, token, id: userExists._id }
       ]
     })
   } catch (error) {

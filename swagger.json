@@ -84,6 +84,10 @@
                 "token": {
                   "type": "string",
                   "format": "jwt"
+                },
+                "id": {
+                  "type": "string",
+                  "format": "ObjectId"
                 }
               }
             }

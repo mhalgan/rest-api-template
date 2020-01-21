@@ -17,7 +17,12 @@ module.exports = function errorHandler(err, req, res, next) {
       statusMessage: res.statusMessage,
       // If we receive the real erro, we log it and return the "fake" error message to the request
       errors: err.realError
-        ? [{ msg: err.realError.message, stack: err.realError.stack }]
+        ? [
+            {
+              msg: err.realError.message || err.realError,
+              stack: err.realError.stack
+            }
+          ]
         : errors
     }
   }
