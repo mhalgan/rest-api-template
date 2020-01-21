@@ -45,7 +45,7 @@ const register = async (req, res, next) => {
     }
 
     return res.status(201).json({
-      success: [{ msg: 'user registered successfully' }]
+      msg: 'user registered successfully'
     })
   } catch (error) {
     res.status(500)
@@ -94,11 +94,14 @@ const login = async (req, res, next) => {
     })
 
     res.set('Authorization', token)
-    res.status(200).json({
-      success: [
-        { msg: 'user logged in successfully', email, token, id: userExists._id }
-      ]
-    })
+    res
+      .status(200)
+      .json({
+        msg: 'user logged in successfully',
+        email,
+        token,
+        id: userExists._id
+      })
   } catch (error) {
     res.status(500)
     return next({

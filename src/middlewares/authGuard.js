@@ -16,6 +16,8 @@ const authClientToken = async (req, res, next) => {
       res.status(401)
       return next({ errors: [{ msg: 'invalid token' }], realError: err })
     }
+
+    req.jwtId = decoded.id
     next()
   })
 }
