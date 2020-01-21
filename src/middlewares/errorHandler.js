@@ -1,27 +1,32 @@
 const logger = require('../config/winston').logger
 
 module.exports = function errorHandler(err, req, res, next) {
-  // Filter relevant error fields
-  if (err) {
-    err = {
-      url: err.req.url,
-      method: err.req.method,
-      params: err.req.params,
-      query: err.req.query,
-      headers: err.req.headers,
-      body: err.req.body,
-      statusCode: err.statusCode,
-      statusMessage: err.statusMessage,
-      realError: res.realError
+  let logError
+  let errors = err.errors || [{ msg: err }]
+
+  // Filter relevant request fields
+  if (errors) {
+    logError = {
+      url: req.url,
+      method: req.method,
+      params: req.params,
+      query: req.query,
+      headers: req.headers,
+      body: req.body,
+      statusCode: res.statusCode,
+      statusMessage: res.statusMessage,
+      // If we receive the real erro, we log it and return the "fake" error message to the request
+      errors: err.realError
+        ? [{ msg: err.realError.message, stack: err.realError.stack }]
+        : errors
     }
   }
 
   if (res.statusCode >= 400 && res.statusCode <= 499) {
-    logger.warn(err)
+    logger.warn(logError)
   } else if (res.statusCode >= 500 && res.statusCode <= 599) {
-    logger.error(err)
+    logger.error(logError)
   }
 
-  delete res.realError
-  return res
+  return res.json({ errors: errors })
 }

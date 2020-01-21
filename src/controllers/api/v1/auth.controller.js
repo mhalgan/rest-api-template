@@ -7,18 +7,31 @@ const userModel = require('../../../models/user.model')
 const register = async (req, res, next) => {
   const errors = validationResult(req)
 
+  // Check if the body of the request is valid
   if (!errors.isEmpty()) {
-    return next(res.status(422).json({ errors: errors.array() }))
+    res.status(422)
+    return next(errors)
   }
+
   let { name, email, password } = req.body
-  let emailExists = await userModel.findOne({ email: email })
 
+  // Check if e-mail already exists
+  let emailExists
+  try {
+    emailExists = await userModel.findOne({ email: email })
+  } catch (error) {
+    res.status(500)
+    return next({
+      errors: [{ msg: 'there was a problem registering the user' }],
+      realError: error
+    })
+  }
   if (emailExists) {
-    return next(
-      res.status(409).json({ errors: [{ msg: 'email already exists' }] })
-    )
+    res.status(409)
+    return next('email already exists')
   }
 
+  // Encrypt the password and create the user in the database
   let hashedPassword = await bcrypt.hash(password, 8)
   try {
     let user = await userModel.create({
@@ -26,20 +39,20 @@ const register = async (req, res, next) => {
       email: email,
       password: hashedPassword
     })
+
     if (!user) {
-      throw new error()
+      throw new error('user not generated')
     }
 
     return res.status(201).json({
       success: [{ msg: 'user registered successfully' }]
     })
   } catch (error) {
-    return next(
-      res.status(500).json({
-        errors: [{ msg: 'there was a problem registering the user' }],
-        realError: error
-      })
-    )
+    res.status(500)
+    return next({
+      errors: [{ msg: 'there was a problem registering the user' }],
+      realError: error
+    })
   }
 }
 
@@ -56,11 +69,8 @@ const login = async (req, res, next) => {
     let passwordValid = await bcrypt.compare(password, userExists.password)
 
     if (!userExists || !passwordValid) {
-      return next(
-        res.status(401).json({
-          errors: [{ msg: 'email/password is wrong' }]
-        })
-      )
+      res.status(401)
+      return next('email/password is wrong')
     }
 
     let token = jwt.sign({ id: userExists._id }, process.env.PRIVATE_KEY, {
@@ -76,10 +86,10 @@ const login = async (req, res, next) => {
     )
   } catch (error) {
     return next(
-      res
-        .status(500)
-        .json({ errors: [{ msg: 'there was a problem login a user' }] }),
-      error
+      res.status(500).json({
+        errors: [{ msg: 'there was a problem login a user' }],
+        realError: error.message
+      })
     )
   }
 }
