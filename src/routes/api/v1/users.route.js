@@ -63,6 +63,7 @@ const usersController = require('../../../controllers/api/v1/users.controller')
  *          description: "User not found"
  */
 router.get('/:id', usersController.checkUser, usersController.getUserById)
+
 router.put('/:id', usersController.checkUser, usersController.updateUser)
 
 /**
