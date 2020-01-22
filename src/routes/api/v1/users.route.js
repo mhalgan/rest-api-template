@@ -7,11 +7,13 @@ const usersController = require('../../../controllers/api/v1/users.controller')
  * @swagger
  *
  * definitions:
- *   UpdateUser:
+ *   User:
  *     type: object
  *     required:
  *       email
  *       name
+ *       createdAt
+ *       updatedAt
  *     properties:
  *       email:
  *         type: string
@@ -19,15 +21,6 @@ const usersController = require('../../../controllers/api/v1/users.controller')
  *       name:
  *         type: string
  *         minLength: 3
- *
- *   User:
- *     allOf:
- *     -  $ref: "#/definitions/UpdateUser"
- *     type: object
- *     required:
- *       createdAt
- *       updatedAt
- *     properties:
  *       createdAt:
  *         type: string
  *         format: date-time
@@ -64,6 +57,42 @@ const usersController = require('../../../controllers/api/v1/users.controller')
  */
 router.get('/:id', usersController.checkUser, usersController.getUserById)
 
+/**
+ *  @swagger
+ *  /users/{id}:
+ *    put:
+ *      summary:
+ *      - Updates user identified by id with the payload values
+ *      produces:
+ *      - application/json
+ *      parameters:
+ *      - name: "id"
+ *        in: "path"
+ *        description: "User id"
+ *        required: true
+ *        type: "string"
+ *      - in: "body"
+ *        name: "body"
+ *        description: "User to be registered"
+ *        required: true
+ *        schema:
+ *          $ref: "#/definitions/RegisterUpdateUser"
+ *      tags:
+ *      - users
+ *      responses:
+ *        200:
+ *          description: "User fetched successfully"
+ *          schema:
+ *            $ref: "#/definitions/User"
+ *        401:
+ *          description: User id param is different from the user id inside JWT payload
+ *        404:
+ *          description: User not found
+ *        409:
+ *          description: E-mail already exists
+ *        422:
+ *          description: Some required field is missing
+ */
 router.put('/:id', usersController.checkUser, usersController.updateUser)
 
 /**

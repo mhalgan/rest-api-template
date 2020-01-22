@@ -22,7 +22,7 @@ const validation = require('../../../middlewares/validation')
  *         minLength: 8
  *         example: testing123
  *
- *   RegisterUser:
+ *   RegisterUpdateUser:
  *     allOf:
  *     -  $ref: "#/definitions/LoginUser"
  *     type: object
@@ -48,7 +48,7 @@ const validation = require('../../../middlewares/validation')
  *        description: "User to be registered"
  *        required: true
  *        schema:
- *          $ref: "#/definitions/RegisterUser"
+ *          $ref: "#/definitions/RegisterUpdateUser"
  *      tags:
  *      - auth
  *      responses:

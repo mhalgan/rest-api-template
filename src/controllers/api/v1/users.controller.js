@@ -36,6 +36,8 @@ const updateUser = async (req, res, next) => {
   let userId = req.params.id
   try {
     const temp = ({ name, email, password } = req.body)
+
+    // Password verifications
     if (temp.password) {
       if (temp.password.length < 8) {
         res.status(422)
@@ -45,7 +47,6 @@ const updateUser = async (req, res, next) => {
     }
 
     let userExists = await User.findById(userId)
-
     if (!userExists) {
       res.status(404)
       return next(`user with id ${userId} not found`)
