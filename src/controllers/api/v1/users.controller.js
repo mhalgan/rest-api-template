@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs')
 const User = require('../../../models/user.model')
 
 const getUserById = async (req, res, next) => {
@@ -33,67 +34,59 @@ const getUserById = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   let userId = req.params.id
-
   try {
-    const { name, email } = req.body
+    const temp = ({ name, email, password } = req.body)
 
-    if (name === undefined || name === '') {
-      return next(
-        res.status(422).json({
-          code: 'REQUIRED_FIELD_MISSING',
-          description: 'name is required',
-          field: 'name'
-        })
-      )
-    }
-
-    if (email === undefined || email === '') {
-      return next(
-        res.status(422).json({
-          code: 'REQUIRED_FIELD_MISSING',
-          description: 'email is required',
-          field: 'email'
-        })
-      )
+    // Password verifications
+    if (temp.password) {
+      if (temp.password.length < 8) {
+        res.status(422)
+        return next(`password must be greater then 8 letters`)
+      }
+      temp.password = await bcrypt.hash(password, 8)
     }
 
     let userExists = await User.findById(userId)
-
     if (!userExists) {
-      return next(
-        res.status(404).json({
-          code: 'BAD_REQUEST_ERROR',
-          description: 'No user found in the system'
-        })
-      )
-    }
-
-    const temp = {
-      name: name,
-      email: email
+      res.status(404)
+      return next(`user with id ${userId} not found`)
     }
 
     let updateUser = await User.findByIdAndUpdate(userId, temp, {
-      new: true
+      useFindAndModify: false,
+      new: true,
+      runValidators: true,
+      select: 'name email createdAt updatedAt'
     })
 
     if (updateUser) {
-      return next(
-        res.status(200).json({
-          message: 'user updated successfully',
-          data: updateUser
-        })
-      )
+      return res.status(200).json({
+        msg: 'user updated successfully',
+        user: updateUser
+      })
     } else {
-      throw new Error('something went worng')
+      throw new Error()
     }
   } catch (error) {
-    return next(
-      res.status(500).json({
-        code: 'SERVER_ERROR',
-        description: 'something went wrong, Please try again'
-      })
-    )
+    if (error.name == 'ValidationError') {
+      res.status(422)
+      return next(error)
+    }
+
+    if (error.name == 'MongoError' && error.codeName == 'DuplicateKey') {
+      res.status(409)
+      return next(error)
+    }
+
+    res.status(500)
+    return next({
+      errors: [
+        {
+          msg: `there was a problem updating the user with id ${userId}`
+        }
+      ],
+      realError: error
+    })
   }
 }
 
