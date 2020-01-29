@@ -4,10 +4,10 @@
   "description": "Complete REST API",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon src/server",
+    "start": "nodemon src/server",
     "build": "echo not implemented yet",
     "api-docs": "swagger-jsdoc -d src/config/swaggerDef.js",
-    "test": "mocha --exit"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
