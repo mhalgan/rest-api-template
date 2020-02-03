@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon src/server",
     "build": "echo not implemented yet",
-    "api-docs": "swagger-jsdoc -d src/config/swaggerDef.js",
+    "api-docs": "swagger-jsdoc -d src/config/swagger.js",
     "test": "jest"
   },
   "repository": {

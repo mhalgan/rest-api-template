@@ -3,7 +3,7 @@ const logger = require('./winston').logger
 
 const collection = 'test'
 const user = 'admin'
-const password = '2GFCikqDsTe9eoHA'
+const password = 'admin'
 
 const connection = {
   mongoAtlas: `mongodb+srv://${user}:${password}@cluster0-cygcu.mongodb.net/${collection}?w=majority`,

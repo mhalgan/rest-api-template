@@ -1,4 +1,4 @@
-const authClientRequest = require('../../../middlewares/authGuard')
+const authClientRequest = require('../../../middlewares/auth-guard.middle')
 const userRoutes = require('./users.route')
 const authRoutes = require('./auth.route')
 

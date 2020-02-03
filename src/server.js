@@ -8,7 +8,7 @@ const logger = require('./config/winston').logger
 const config = require('./config/env/config')
 const db = require('./config/db')
 const routes = require('./routes')
-const errorHandler = require('./middlewares/errorHandler')
+const errorHandler = require('./middlewares/error-handler.middle')
 
 let app = express()
 
